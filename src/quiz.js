@@ -10,6 +10,7 @@ class Quiz {
         this.currentQuestionIndex = 0;
     }
     
+    
     getQuestion() {
         return this.questions[this.currentQuestionIndex];
 
@@ -46,4 +47,31 @@ class Quiz {
             return true
         }
     }
+
+    filterQuestionsByDifficulty(difficulty) {
+        
+        if (difficulty >= 1 || difficulty <= 3) {
+            this.questions = this.questions.filter(element => {
+                return element.difficulty === difficulty;
+        });
+                return this.questions;
+        }
+    }
+
+    averageDifficulty() {
+        
+        const totalDifficulty = this.questions.reduce((acc, currentValue) => {
+                console.log(acc);
+                console.log(currentValue)
+                return acc + currentValue.difficulty  
+        }, 0);
+
+        const avgDiff = totalDifficulty / this.questions.length;
+        return avgDiff
+
+       
+    }     
+       
 }
+        
+    
