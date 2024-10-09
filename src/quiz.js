@@ -28,7 +28,6 @@ class Quiz {
             this.questions[i] = this.questions[j];
             this.questions[j] = temp;      
         }
-        console.log(shuffle);
         return shuffle;
     }
     
