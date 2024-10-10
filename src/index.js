@@ -56,39 +56,28 @@ document.addEventListener("DOMContentLoaded", () => {
   // Show first question
   showQuestion();
 
-
   /************  TIMER  ************/
 
-  /*let timer = quiz.timeRemaining
-  let hjfjs = (function(){
-    
-    timeRemainingContainer.innerText = `${minutes}:${seconds}`
-    if (seconds === 0){
-      seconds = 59;
-      quiz.timeRemaining--
+  let timer;
+  startTimer()
+ function startTimer(){
+   timer = setInterval(() => {
+    if(quiz.timeRemaining === 0) {
+      clearInterval(timer)
+      showResults()
     }
-   
-   
+    const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
+    const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
 
-    }, 1000) */
+  timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+    quiz.timeRemaining -= 1;
+  }, 1000)
+ }
  
   
-  /*let minSecs = setInterval(function () {
-    if (seconds = 0) {
-      minutes--;
-    }
-    seconds--;
-    if(minutes && seconds === 0) {
-      clearInterval(minSecs);
-    }
-
-  }, 1000);
-*/
-  
-
-
+//}
   /************  EVENT LISTENERS  ************/
-
+  
   nextButton.addEventListener("click", nextButtonHandler);
   restartButton.addEventListener("click", restartQuiz);
 
@@ -106,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showResults();
       return;
     }
-  
+    
     // Clear the previous question text and question choices
     questionContainer.innerText = "";
     choiceContainer.innerHTML = "";
@@ -117,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Shuffle the choices of the current question by calling the method 'shuffleChoices()' on the question object
     question.shuffleChoices();
     
-
     // YOUR CODE HERE:
     //
     // 1. Show the question
@@ -131,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. Update the green progress bar
     // Update the green progress bar (div#progressBar) width so that it shows the percentage of questions answered
-    debugger;
+  
    let progPercent = (quiz.currentQuestionIndex  / questions.length) * 100;
    progressBar.style.width = `${progPercent}%`; // This value is hardcoded as a placeholder
 
@@ -181,30 +169,35 @@ radioButtons(questions[quiz.currentQuestionIndex]);
     //
     // 1. Get all the choice elements. You can use the `document.querySelectorAll()` method.
     
-    let selectedAnswer =  document.querySelectorAll('input') 
+    let selectedAnswer; 
+    
+   let allInputs =  document.querySelectorAll('input') 
     
      // 2. Loop through all the choice elements and check which one is selected
       // Hint: Radio input elements have a property `.checked` (e.g., `element.checked`).
       //  When a radio input gets selected the `.checked` property will be set to true.
       //  You can use check which choice was selected by checking if the `.checked` property is true.
     
-      selectedAnswer.forEach((radioChoice, i) => {
+      allInputs.forEach((radioChoice) => {
        if (radioChoice.checked === true) {
-          quiz.checkAnswer(selectedAnswer[i].value)
-       }
-  })
+        selectedAnswer = radioChoice.value
+      }
+    })
+    if(selectedAnswer){
+      quiz.checkAnswer(selectedAnswer)
+      quiz.moveToNextQuestion()
+      showQuestion()
 
-    quiz.moveToNextQuestion()
-    showQuestion()
+    }else{
+      alert("Please select something")
+    }
+ 
+
     // 3. If an answer is selected (`selectedAnswer`), check if it is correct and move to the next question
       // Check if selected answer is correct by calling the quiz method `checkAnswer()` with the selected answer.
       // Move to the next question by calling the quiz method `moveToNextQuestion()`.
       // Show the next question by calling the function `showQuestion()`.
   }
-
-
- 
-  
 
   function showResults() {
 
@@ -226,10 +219,12 @@ radioButtons(questions[quiz.currentQuestionIndex]);
     quizView.style.display = "flex";
     quiz.currentQuestionIndex = 0;
     quiz.correctAnswers = 0;
+    quiz.timeRemaining = 120;
     
 
     quiz.shuffleQuestions();
     showQuestion();
+    startTimer()
   }
 
   });
