@@ -12,11 +12,13 @@ class Quiz {
     
     
     getQuestion() {
+        
         return this.questions[this.currentQuestionIndex];
 
     }
     
     moveToNextQuestion() {
+        
         return this.currentQuestionIndex++
     }
 
@@ -33,7 +35,7 @@ class Quiz {
     
     checkAnswer(answer) {
         
-        if (this.questions[this.currentQuestionIndex].answer === answer) {
+        if (this.questions[this.currentQuestionIndex].answer == answer) {
             this.correctAnswers++;
         } 
         return this.correctAnswers;
